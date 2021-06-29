@@ -1,15 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, Touchable, TouchableOpacity, View} from 'react-native';
-import {IconBackDark} from '../../../assets';
+import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../../utils';
-import {Gaps} from '../../atoms';
+import {Button, Gaps} from '../../atoms';
 
 const Header = ({judul, onPress}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
-        <IconBackDark />
-      </TouchableOpacity>
+      <Button type="icon-only" icon="back-dark" onPress={onPress} />
       <Text style={styles.text}>{judul}</Text>
       <Gaps width={24} />
     </View>

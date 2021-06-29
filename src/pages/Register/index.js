@@ -6,10 +6,7 @@ import {colors} from '../../utils';
 const Register = ({navigation}) => {
   return (
     <View style={styles.page}>
-      <Header
-        judul="Daftar Akun"
-        onPress={() => navigation.navigate('GetStarted')}
-      />
+      <Header judul="Daftar Akun" onPress={() => navigation.goBack()} />
       <View style={styles.content}>
         <Input label="Full Name" />
         <Gaps height={24} />
@@ -19,7 +16,10 @@ const Register = ({navigation}) => {
         <Gaps height={24} />
         <Input label="Password" />
         <Gaps height={40} />
-        <Button judul="Continue" />
+        <Button
+          judul="Continue"
+          onPress={() => navigation.navigate('UploadPhoto')}
+        />
       </View>
     </View>
   );
