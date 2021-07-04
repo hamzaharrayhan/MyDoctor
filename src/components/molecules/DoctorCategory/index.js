@@ -12,7 +12,7 @@ const DoctorCategory = ({kategori}) => {
     if (kategori === 'psikiater') {
       return <ILCatPsikiater />;
     }
-    if (kategori === 'dokter obat') {
+    if (kategori === 'obat') {
       return <ILCatObat />;
     }
     if (kategori === 'dokter anak') {

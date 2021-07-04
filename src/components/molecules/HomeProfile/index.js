@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
   },
-  foto: {height: 46, width: 46, marginRight: 12},
+  foto: {height: 46, width: 46, marginRight: 12, borderRadius: 46 / 2},
   text: {justifyContent: 'center'},
   nama: {
     fontFamily: Fonts.primary[600],
