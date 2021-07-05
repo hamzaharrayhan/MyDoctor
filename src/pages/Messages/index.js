@@ -11,19 +11,19 @@ const Messages = () => {
       id: 1,
       pic: DummyDoctor4,
       name: 'Alexander Jannie',
-      chat: 'Baik ibu, terima kasih banyak atas wakt...',
+      desc: 'Baik ibu, terima kasih banyak atas wakt...',
     },
     {
       id: 2,
       pic: DummyDoctor5,
       name: 'Nairobi Putri Hayza',
-      chat: 'Oh tentu saja tidak karena jeruk it...',
+      desc: 'Oh tentu saja tidak karena jeruk it...',
     },
     {
       id: 3,
       pic: DummyDoctor6,
       name: 'John McParker Steve',
-      chat: 'Oke menurut pak dokter bagaimana unt...',
+      desc: 'Oke menurut pak dokter bagaimana unt...',
     },
   ]);
   return (
@@ -37,7 +37,7 @@ const Messages = () => {
               key={doctor.id}
               pic={doctor.pic}
               name={doctor.name}
-              chat={doctor.chat}
+              desc={doctor.desc}
             />
           );
         })}
