@@ -17,6 +17,7 @@ const ChooseDoctor = ({navigation}) => {
         pic={DummyDoctor4}
         name="Alexander Jannie"
         desc="wanita"
+        onPress={() => navigation.navigate('Chatting')}
       />
       <ListDoctor
         type="next"

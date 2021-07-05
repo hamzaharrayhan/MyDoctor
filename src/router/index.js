@@ -11,6 +11,7 @@ import {
   Messages,
   Hospitals,
   ChooseDoctor,
+  Chatting,
 } from '../pages';
 import {BottomNavigator} from '../components';
 
@@ -29,7 +30,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash">
+    <Stack.Navigator initialRouteName="Chatting">
       <Stack.Screen
         name="Splash"
         component={Splash}
@@ -63,6 +64,11 @@ const Router = () => {
       <Stack.Screen
         name="ChooseDoctor"
         component={ChooseDoctor}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Chatting"
+        component={Chatting}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
