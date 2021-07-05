@@ -6,6 +6,8 @@ import NewsItem from './NewsItem';
 import RatedDoctor from './RatedDoctor';
 import ListDoctor from './ListDoctor';
 import ListHospital from './ListHospital';
+import ChatItem from './ChatItem';
+import InputChat from './InputChat';
 
 export {
   Header,
@@ -16,4 +18,6 @@ export {
   RatedDoctor,
   ListDoctor,
   ListHospital,
+  ChatItem,
+  InputChat,
 };
