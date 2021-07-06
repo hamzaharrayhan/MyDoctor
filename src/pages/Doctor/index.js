@@ -8,16 +8,24 @@ import {
   Gaps,
 } from '../../components';
 import {colors, Fonts} from '../../utils';
-import {JSONDoctorCategory} from '../../assets';
+import {
+  DummyDoctor1,
+  DummyDoctor2,
+  DummyDoctor3,
+  DummyNews1,
+  DummyNews2,
+  DummyNews3,
+  JSONDoctorCategory,
+} from '../../assets';
 
 const Doctor = ({navigation}) => {
   return (
     <View style={styles.page}>
       <View style={styles.content}>
-        <ScrollView vertical showsVerticalScrollIndicator>
+        <ScrollView vertical showsVerticalScrollIndicator={false}>
           <Gaps height={30} />
           <View style={styles.profile}>
-            <HomeProfile />
+            <HomeProfile onPress={() => navigation.navigate('ProfilePage')} />
             <Text style={styles.ask}>
               Mau konsultasi dengan siapa hari ini?
             </Text>
@@ -42,16 +50,43 @@ const Doctor = ({navigation}) => {
           <View style={styles.ratenews}>
             <View>
               <Text style={styles.sectionlabel}>Top Rated Doctors</Text>
-              <RatedDoctor />
-              <RatedDoctor />
-              <RatedDoctor />
+              <RatedDoctor
+                name="Alexa Rachel"
+                desc="Pediatrician"
+                avatar={DummyDoctor1}
+                onPress={() => navigation.navigate('DoctorProfile')}
+              />
+              <RatedDoctor
+                name="Sunny Frank"
+                desc="Dentist"
+                avatar={DummyDoctor2}
+                onPress={() => navigation.navigate('DoctorProfile')}
+              />
+              <RatedDoctor
+                name="Poe Minh"
+                desc="Podiatrist"
+                avatar={DummyDoctor3}
+                onPress={() => navigation.navigate('DoctorProfile')}
+              />
             </View>
           </View>
           <View>
             <Text style={styles.sectionlabel2}>Good News</Text>
-            <NewsItem />
-            <NewsItem />
-            <NewsItem />
+            <NewsItem
+              picture={DummyNews1}
+              date="Today"
+              label="Is it safe to stay at home during coronavirus?"
+            />
+            <NewsItem
+              picture={DummyNews2}
+              date="Today"
+              label="Consume yellow citrus helps you healthier"
+            />
+            <NewsItem
+              picture={DummyNews3}
+              date="Today"
+              label="Learn how to make a proper orange juice at home"
+            />
           </View>
           <Gaps height={16} />
         </ScrollView>

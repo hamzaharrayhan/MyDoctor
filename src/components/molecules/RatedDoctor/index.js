@@ -1,17 +1,17 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {DummyDoctor1, DummyDoctor2, DummyDoctor3} from '../../../assets';
 import {IconStar} from '../../../assets';
 import {colors, Fonts} from '../../../utils';
 
-const RatedDoctor = () => {
+const RatedDoctor = ({onPress, name, desc, avatar}) => {
   return (
-    <View style={styles.container}>
-      <Image source={DummyDoctor1} style={styles.profilpic} />
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+      <Image source={avatar} style={styles.profilpic} />
       <View style={styles.textstar}>
         <View style={styles.text}>
-          <Text style={styles.nama}>Alexa Rachel</Text>
-          <Text style={styles.profesi}>Pediatrician</Text>
+          <Text style={styles.nama}>{name}</Text>
+          <Text style={styles.profesi}>{desc}</Text>
         </View>
         <View style={styles.star}>
           <IconStar />
@@ -21,7 +21,7 @@ const RatedDoctor = () => {
           <IconStar />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
   },
   star: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
 });

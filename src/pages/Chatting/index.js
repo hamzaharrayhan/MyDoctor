@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {ChatItem, Header, InputChat} from '../../components';
 import {colors, Fonts} from '../../utils';
 
-const Chatting = navigation => {
+const Chatting = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Header type="dark-profile" onPress={() => navigation.goBack()} />

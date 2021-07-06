@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {ILCatUmum, ILCatPsikiater, ILCatObat, ILCatAnak} from '../../../assets';
-import {Gaps} from '../../../components';
+import {Gaps} from '../../atoms';
 import {colors, Fonts} from '../../../utils';
 
 const DoctorCategory = ({kategori, onPress}) => {

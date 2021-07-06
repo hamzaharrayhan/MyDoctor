@@ -1,17 +1,17 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {DummyUser} from '../../../assets';
 import {colors, Fonts} from '../../../utils';
 
-const HomeProfile = () => {
+const HomeProfile = ({onPress}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image source={DummyUser} style={styles.foto} />
       <View style={styles.text}>
         <Text style={styles.nama}>Shayna Melinda</Text>
         <Text style={styles.profesi}>Product Designer</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
