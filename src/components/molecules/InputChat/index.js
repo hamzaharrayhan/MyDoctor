@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View, TextInput} from 'react-native';
+import {StyleSheet, View, TextInput} from 'react-native';
 import {colors, Fonts} from '../../../utils';
-import {Button} from '../..';
+import {Button} from '../../atoms';
 
 const InputChat = () => {
   return (

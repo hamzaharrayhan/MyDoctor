@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {DummyDoctor8} from '../../../assets';
-import {Button} from '../..';
+import {Button} from '../../atoms';
 import {colors, Fonts} from '../../../utils';
 
 const DarkProfile = ({onPress}) => {

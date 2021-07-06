@@ -1,50 +1,56 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, ScrollView, View} from 'react-native';
 import {DummyDoctor4} from '../../assets';
-import {Header, ListDoctor} from '../../components';
+import {Header, ListItem} from '../../components';
 import {colors} from '../../utils';
 
 const ChooseDoctor = ({navigation}) => {
   return (
-    <View style={styles.page}>
-      <Header
-        judul="Pilih Dokter Anak"
-        type="dark"
-        onPress={() => navigation.goBack()}
-      />
-      <ListDoctor
-        type="next"
-        pic={DummyDoctor4}
-        name="Alexander Jannie"
-        desc="wanita"
-        onPress={() => navigation.navigate('Chatting')}
-      />
-      <ListDoctor
-        type="next"
-        type="next"
-        pic={DummyDoctor4}
-        name="Alexander Jannie"
-        desc="wanita"
-      />
-      <ListDoctor
-        type="next"
-        pic={DummyDoctor4}
-        name="Alexander Jannie"
-        desc="wanita"
-      />
-      <ListDoctor
-        type="next"
-        pic={DummyDoctor4}
-        name="Alexander Jannie"
-        desc="wanita"
-      />
-      <ListDoctor
-        type="next"
-        pic={DummyDoctor4}
-        name="Alexander Jannie"
-        desc="wanita"
-      />
-    </View>
+    <ScrollView>
+      <View style={styles.page}>
+        <Header
+          judul="Pilih Dokter Anak"
+          type="dark"
+          onPress={() => navigation.goBack()}
+        />
+        <ListItem
+          type="next"
+          pic={DummyDoctor4}
+          name="Alexander Jannie"
+          desc="wanita"
+          onPress={() => navigation.navigate('Chatting')}
+        />
+        <ListItem
+          type="next"
+          type="next"
+          pic={DummyDoctor4}
+          name="Alexander Jannie"
+          desc="wanita"
+          onPress={() => navigation.navigate('Chatting')}
+        />
+        <ListItem
+          type="next"
+          pic={DummyDoctor4}
+          name="Alexander Jannie"
+          desc="wanita"
+          onPress={() => navigation.navigate('Chatting')}
+        />
+        <ListItem
+          type="next"
+          pic={DummyDoctor4}
+          name="Alexander Jannie"
+          desc="wanita"
+          onPress={() => navigation.navigate('Chatting')}
+        />
+        <ListItem
+          type="next"
+          pic={DummyDoctor4}
+          name="Alexander Jannie"
+          desc="wanita"
+          onPress={() => navigation.navigate('Chatting')}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
