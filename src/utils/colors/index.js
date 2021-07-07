@@ -14,6 +14,7 @@ const mainColors = {
 export const colors = {
   primary: mainColors.green1,
   secondary: mainColors.dark1,
+  tertiary: mainColors.blue1,
   white: 'white',
   black: 'black',
   disable: mainColors.grey3,

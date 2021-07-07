@@ -1,26 +1,54 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {useState} from 'react';
+import {StyleSheet, ScrollView, View} from 'react-native';
 import {Button, Gaps, Header, Input} from '../../components';
-import {colors} from '../../utils';
+import {colors, useForm} from '../../utils';
 
 const Register = ({navigation}) => {
+  const [form, setForm] = useForm({
+    fullName: '',
+    profession: '',
+    email: '',
+    password: '',
+  });
+
+  const onContinue = () => {
+    console.log(form);
+    // () => navigation.navigate('UploadPhoto')
+  };
   return (
     <View style={styles.page}>
       <Header judul="Daftar Akun" onPress={() => navigation.goBack()} />
-      <View style={styles.content}>
-        <Input label="Full Name" />
-        <Gaps height={24} />
-        <Input label="Pekerjaan" />
-        <Gaps height={24} />
-        <Input label="Email Address" />
-        <Gaps height={24} />
-        <Input label="Password" />
-        <Gaps height={40} />
-        <Button
-          judul="Continue"
-          onPress={() => navigation.navigate('UploadPhoto')}
-        />
-      </View>
+      <ScrollView>
+        <View style={styles.content}>
+          <Input
+            label="Full Name"
+            value={form.fullName}
+            onChangeText={value => setForm('fullName', value)}
+          />
+          <Gaps height={24} />
+          <Input
+            label="Pekerjaan"
+            value={form.profession}
+            onChangeText={value => setForm('profession', value)}
+          />
+          <Gaps height={24} />
+          <Input
+            label="Email Address"
+            value={form.email}
+            onChangeText={value => setForm('email', value)}
+          />
+          <Gaps height={24} />
+          <Input
+            label="Password"
+            value={form.password}
+            onChangeText={value => setForm('password', value)}
+            secureTextEntry={true}
+          />
+          <Gaps height={40} />
+          <Button judul="Continue" onPress={onContinue} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
