@@ -1,8 +1,8 @@
 import React from 'react';
-import {useState} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
 import {Button, Gaps, Header, Input} from '../../components';
 import {colors, useForm} from '../../utils';
+import {Firebase} from '../../config';
 
 const Register = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -14,11 +14,28 @@ const Register = ({navigation}) => {
 
   const onContinue = () => {
     console.log(form);
+    Firebase.auth()
+      .createUserWithEmailAndPassword(form.email, form.password)
+      .then(userCredential => {
+        // Signed in
+        var user = userCredential;
+        console.log('success register', user);
+        // ...
+      })
+      .catch(error => {
+        const errorMessage = error.message;
+        console.log('error register: ', errorMessage);
+        // ..
+      });
+
     // () => navigation.navigate('UploadPhoto')
   };
   return (
     <View style={styles.page}>
-      <Header judul="Daftar Akun" onPress={() => navigation.goBack()} />
+      <Header
+        judul="Daftar Akun"
+        onPress={() => navigation.goBack('GetStarted')}
+      />
       <ScrollView>
         <View style={styles.content}>
           <Input

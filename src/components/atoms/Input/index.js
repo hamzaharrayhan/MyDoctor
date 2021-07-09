@@ -40,5 +40,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: borderC,
     height: 45,
+    color: colors.text.primary,
   }),
 });
