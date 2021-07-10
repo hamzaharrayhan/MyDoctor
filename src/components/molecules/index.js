@@ -10,6 +10,7 @@ import ChatItem from './ChatItem';
 import InputChat from './InputChat';
 import UserProfile from './UserProfile'
 import ProfileItem from './ProfileItem';
+import Loading from './Loading';
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   InputChat,
   UserProfile,
   ProfileItem,
+  Loading,
 };

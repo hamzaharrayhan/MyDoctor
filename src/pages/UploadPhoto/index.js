@@ -1,24 +1,44 @@
-import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Header, Button, Link, Gaps} from '../../components';
-import {ILNullPhoto, IconAddPhoto} from '../../assets';
+import {ILNullPhoto, IconAddPhoto, IconDeletePhoto} from '../../assets';
 import {colors, Fonts} from '../../utils';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const UploadPhoto = ({navigation}) => {
+  const getImage = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+      const source = {uri: image.path};
+      setPhoto(source);
+      setHasPhoto(true);
+    });
+  };
+  const [photo, setPhoto] = useState(ILNullPhoto);
+  const [hasPhoto, setHasPhoto] = useState(false);
   return (
     <View style={styles.page}>
       <Header judul="Upload Photo" onPress={() => navigation.goBack()} />
       <View style={styles.content}>
         <View style={styles.profile}>
-          <View style={styles.avatarWrapper}>
-            <Image source={ILNullPhoto} style={styles.avatar} />
-            <IconAddPhoto style={styles.addPhoto} />
-          </View>
+          <TouchableOpacity style={styles.avatarWrapper} onPress={getImage}>
+            <Image source={photo} style={styles.avatar} />
+            {!hasPhoto ? (
+              <IconAddPhoto style={styles.addPhoto} />
+            ) : (
+              <IconDeletePhoto style={styles.addPhoto} />
+            )}
+          </TouchableOpacity>
           <Text style={styles.name}>Shayna Melinda</Text>
           <Text style={styles.profession}>Product Designer</Text>
         </View>
         <View>
           <Button
+            disable={!hasPhoto}
             judul="Upload and Continue"
             onPress={() => navigation.replace('MainApp')}
           />
@@ -50,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
-  avatar: {width: 110, height: 110},
+  avatar: {width: 110, height: 110, borderRadius: 110 / 2},
   avatarWrapper: {
     width: 130,
     height: 130,
