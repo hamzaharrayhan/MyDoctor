@@ -2,24 +2,55 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Header, Button, Link, Gaps} from '../../components';
 import {ILNullPhoto, IconAddPhoto, IconDeletePhoto} from '../../assets';
-import {colors, Fonts} from '../../utils';
+import {colors, Fonts, storeData} from '../../utils';
 import ImagePicker from 'react-native-image-crop-picker';
+import {showMessage} from 'react-native-flash-message';
+import {Firebase} from '../../config';
 
-const UploadPhoto = ({navigation}) => {
-  const getImage = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-    }).then(image => {
-      console.log(image);
-      const source = {uri: image.path};
-      setPhoto(source);
-      setHasPhoto(true);
-    });
-  };
+const UploadPhoto = ({navigation, route}) => {
   const [photo, setPhoto] = useState(ILNullPhoto);
   const [hasPhoto, setHasPhoto] = useState(false);
+  const [photoDB, setPhotoDB] = useState('');
+  const {fullName, profession, uid} = route.params;
+  const getImage = () => {
+    ImagePicker.openPicker({
+      compressImageMaxWidth: 200,
+      compressImageMaxHeight: 200,
+      compressImageQuality: 0.3,
+      cropping: true,
+      includeBase64: true,
+    })
+      .then(image => {
+        // console.log(image);
+        const source = {uri: image.path};
+        setPhotoDB(`data:${image.mime};base64, ${image.data}`);
+        setPhoto(source);
+        setHasPhoto(true);
+      })
+      .catch(error => {
+        const errorM = error;
+        // console.log(errorM);
+        showMessage({
+          message: 'Anda belum memasukan foto',
+          type: 'default',
+          backgroundColor: colors.error,
+          color: colors.white,
+        });
+      });
+  };
+
+  const uploadAndContinue = () => {
+    Firebase.database()
+      .ref('users/' + uid + '/')
+      .update({photo: photoDB});
+    navigation.replace('MainApp');
+  };
+
+  const data = route.params;
+  data.photo = photoDB;
+
+  storeData('user', data)
+
   return (
     <View style={styles.page}>
       <Header judul="Upload Photo" onPress={() => navigation.goBack()} />
@@ -33,14 +64,14 @@ const UploadPhoto = ({navigation}) => {
               <IconDeletePhoto style={styles.addPhoto} />
             )}
           </TouchableOpacity>
-          <Text style={styles.name}>Shayna Melinda</Text>
-          <Text style={styles.profession}>Product Designer</Text>
+          <Text style={styles.name}>{fullName}</Text>
+          <Text style={styles.profession}>{profession}</Text>
         </View>
         <View>
           <Button
             disable={!hasPhoto}
             judul="Upload and Continue"
-            onPress={() => navigation.replace('MainApp')}
+            onPress={uploadAndContinue}
           />
           <Gaps height={30} />
           <Link
