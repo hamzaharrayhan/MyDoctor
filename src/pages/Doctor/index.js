@@ -7,7 +7,7 @@ import {
   NewsItem,
   Gaps,
 } from '../../components';
-import {colors, Fonts} from '../../utils';
+import {colors, Fonts, getData} from '../../utils';
 import {
   DummyDoctor1,
   DummyDoctor2,
@@ -17,8 +17,14 @@ import {
   DummyNews3,
   JSONDoctorCategory,
 } from '../../assets';
+import { useEffect } from 'react';
 
 const Doctor = ({navigation}) => {
+  useEffect(() => {
+    getData('user').then(res => {
+      console.log('data user:', res);
+    })
+  }, []);
   return (
     <View style={styles.page}>
       <View style={styles.content}>
