@@ -1,17 +1,27 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {DummyUser, IconDeletePhoto} from '../../../assets';
 import {colors, Fonts} from '../../../utils';
 
-const UserProfile = ({name, desc, avatar, isRemove}) => {
+const UserProfile = ({name, desc, avatar, isRemove, onPress}) => {
   return (
     <View style={styles.container}>
-      <View>
-        <View style={styles.imgborder}>
-          <Image source={avatar} style={styles.avatar} />
+      {!isRemove && (
+        <View>
+          <View style={styles.imgborder}>
+            <Image source={avatar} style={styles.avatar} />
+          </View>
+          {isRemove && <IconDeletePhoto style={styles.delete} />}
         </View>
-        {isRemove && <IconDeletePhoto style={styles.delete} />}
-      </View>
+      )}
+      {isRemove && (
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.imgborder}>
+            <Image source={avatar} style={styles.avatar} />
+          </View>
+          <IconDeletePhoto style={styles.delete} />
+        </TouchableOpacity>
+      )}
       {name && (
         <View style={styles.text}>
           <Text style={styles.nama}>{name}</Text>
@@ -57,8 +67,8 @@ const styles = StyleSheet.create({
   },
   delete: {
     position: 'absolute',
-    right: 8,
-    bottom: 10,
+    right: 10,
+    bottom: 20,
   },
   text: {
     justifyContent: 'center',

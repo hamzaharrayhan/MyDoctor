@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import { colors, Fonts } from '../../../utils';
+import {colors, Fonts} from '../../../utils';
 
 const ProfileItem = ({title, value}) => {
   return (
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
   container: {
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
-    marginBottom: 16
+    marginBottom: 16,
   },
 });

@@ -4,7 +4,7 @@ import {DummyDoctor1, DummyDoctor2, DummyDoctor3} from '../../../assets';
 import {IconStar} from '../../../assets';
 import {colors, Fonts} from '../../../utils';
 
-const RatedDoctor = ({onPress, name, desc, avatar}) => {
+const RatedDoctor = ({onPress, name, desc, avatar, id}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image source={avatar} style={styles.profilpic} />

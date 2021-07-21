@@ -65,10 +65,12 @@ const styles = StyleSheet.create({
   nama: {
     fontSize: 16,
     fontFamily: Fonts.primary[400],
+    textTransform: 'capitalize',
   },
   desc: {
     fontSize: 12,
     fontFamily: Fonts.primary[300],
     color: colors.text.secondary,
+    textTransform: 'capitalize',
   },
 });

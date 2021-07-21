@@ -1,10 +1,15 @@
-import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {ILCatUmum, ILCatPsikiater, ILCatObat, ILCatAnak} from '../../../assets';
-import {Gaps} from '../../atoms';
-import {colors, Fonts} from '../../../utils';
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  ILCatUmum,
+  ILCatPsikiater,
+  ILCatObat,
+  ILCatAnak,
+} from "../../../assets";
+import { Gaps } from "../../atoms";
+import { colors, Fonts } from "../../../utils";
 
-const DoctorCategory = ({kategori, onPress}) => {
+const DoctorCategory = ({ kategori, onPress, id }) => {
   const Category = () => {
     if (kategori === 'dokter umum') {
       return <ILCatUmum />;
@@ -38,8 +43,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cardLight,
     alignSelf: 'flex-start',
     marginRight: 10,
-    width: 100,
-    height: 130,
     borderRadius: 10,
   },
   label: {

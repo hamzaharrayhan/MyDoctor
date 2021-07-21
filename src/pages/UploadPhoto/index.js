@@ -1,17 +1,28 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Header, Button, Link, Gaps} from '../../components';
 import {ILNullPhoto, IconAddPhoto, IconDeletePhoto} from '../../assets';
-import {colors, Fonts, storeData} from '../../utils';
+import {colors, Fonts, storeData, getData, showError} from '../../utils';
 import ImagePicker from 'react-native-image-crop-picker';
-import {showMessage} from 'react-native-flash-message';
 import {Firebase} from '../../config';
+import {useDispatch} from 'react-redux';
 
-const UploadPhoto = ({navigation, route}) => {
+const UploadPhoto = ({navigation}) => {
   const [photo, setPhoto] = useState(ILNullPhoto);
   const [hasPhoto, setHasPhoto] = useState(false);
   const [photoDB, setPhotoDB] = useState('');
-  const {fullName, profession, uid} = route.params;
+  const [profile, setProfile] = useState({
+    photo: ILNullPhoto,
+    fullName: '',
+    profession: '',
+  });
+
+  useEffect(() => {
+    getData('user').then(res => {
+      setProfile(res);
+    });
+  }, []);
+
   const getImage = () => {
     ImagePicker.openPicker({
       compressImageMaxWidth: 200,
@@ -21,35 +32,88 @@ const UploadPhoto = ({navigation, route}) => {
       includeBase64: true,
     })
       .then(image => {
-        // console.log(image);
         const source = {uri: image.path};
         setPhotoDB(`data:${image.mime};base64, ${image.data}`);
         setPhoto(source);
         setHasPhoto(true);
       })
-      .catch(error => {
-        const errorM = error;
-        // console.log(errorM);
-        showMessage({
-          message: 'Anda belum memasukan foto',
-          type: 'default',
-          backgroundColor: colors.error,
-          color: colors.white,
+      .catch(() => {
+        showError('Anda belum memasukan foto');
+        setPhotoDB(
+          'https://firebasestorage.googleapis.com/v0/b/my-doctor-76977.appspot.com/o/null-photo.png?alt=media&token=65ff8bfc-85c2-47a1-af5a-aa82c853fef7',
+        );
+        setPhoto({
+          uri: 'https://firebasestorage.googleapis.com/v0/b/my-doctor-76977.appspot.com/o/null-photo.png?alt=media&token=65ff8bfc-85c2-47a1-af5a-aa82c853fef7',
         });
       });
   };
 
-  const uploadAndContinue = () => {
-    Firebase.database()
-      .ref('users/' + uid + '/')
-      .update({photo: photoDB});
-    navigation.replace('MainApp');
+  // const uploadAndContinue = () => {
+  //   Firebase.database()
+  //     .ref('users/' + profile.uid + '/')
+  //     .update({photo: photoDB});
+  //   const data = profile;
+  //   data.photo = photoDB;
+  //   storeData('user', data);
+  //   navigation.replace('MainApp');
+  // };
+
+  const dispatch = useDispatch();
+  const onContinue = () => {
+    dispatch({type: 'SET_LOADING', value: true});
+    Firebase.auth()
+      .createUserWithEmailAndPassword(profile.email, profile.password)
+      .then(userCredential => {
+        // Signed in
+        dispatch({type: 'SET_LOADING', value: false});
+        const data = {
+          fullName: profile.fullName,
+          profession: profile.profession,
+          email: profile.email,
+          photo: photoDB,
+          uid: userCredential.user.uid,
+        };
+        Firebase.database()
+          .ref('users/' + userCredential.user.uid + '/')
+          .set(data);
+        storeData('user', data);
+        navigation.navigate('MainApp', profile);
+      })
+      .catch(error => {
+        dispatch({type: 'SET_LOADING', value: false});
+        showError(error.message);
+      });
   };
 
-  const data = route.params;
-  data.photo = photoDB;
-
-  storeData('user', data)
+  const onSkip = () => {
+    setPhoto({
+      uri: 'https://firebasestorage.googleapis.com/v0/b/my-doctor-76977.appspot.com/o/null-photo.png?alt=media&token=65ff8bfc-85c2-47a1-af5a-aa82c853fef7',
+    });
+    Firebase.auth()
+      .createUserWithEmailAndPassword(profile.email, profile.password)
+      .then(userCredential => {
+        // Signed in
+        dispatch({type: 'SET_LOADING', value: false});
+        const data = {
+          fullName: profile.fullName,
+          profession: profile.profession,
+          email: profile.email,
+          photo:
+            'https://firebasestorage.googleapis.com/v0/b/my-doctor-76977.appspot.com/o/null-photo.png?alt=media&token=65ff8bfc-85c2-47a1-af5a-aa82c853fef7',
+          uid: userCredential.user.uid,
+        };
+        console.log('datanya apa aja', data)
+        Firebase.database()
+          .ref('users/' + userCredential.user.uid + '/')
+          .set(data);
+        storeData('user', data);
+        navigation.navigate('MainApp', profile);
+      })
+      .catch(error => {
+        dispatch({type: 'SET_LOADING', value: false});
+        showError(error.message);
+      });
+  };
 
   return (
     <View style={styles.page}>
@@ -64,14 +128,14 @@ const UploadPhoto = ({navigation, route}) => {
               <IconDeletePhoto style={styles.addPhoto} />
             )}
           </TouchableOpacity>
-          <Text style={styles.name}>{fullName}</Text>
-          <Text style={styles.profession}>{profession}</Text>
+          <Text style={styles.name}>{profile.fullName}</Text>
+          <Text style={styles.profession}>{profile.profession}</Text>
         </View>
         <View>
           <Button
             disable={!hasPhoto}
             judul="Upload and Continue"
-            onPress={uploadAndContinue}
+            onPress={onContinue}
           />
           <Gaps height={30} />
           <Link
@@ -79,7 +143,7 @@ const UploadPhoto = ({navigation, route}) => {
             posisi="center"
             size={16}
             color={colors.text.secondary}
-            onPress={() => navigation.replace('MainApp')}
+            onPress={onSkip}
           />
         </View>
       </View>
