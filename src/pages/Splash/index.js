@@ -1,13 +1,21 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {ILLogo} from '../../assets';
-import { colors } from '../../utils';
+import {Firebase} from '../../config';
+import {colors} from '../../utils';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('GetStarted');
-    }, 3000);
+    const unsubscribe = Firebase.auth().onAuthStateChanged(user => {
+      setTimeout(() => {
+        if (user) {
+          navigation.replace('MainApp');
+        } else {
+          navigation.replace('GetStarted');
+        }
+      }, 3000);
+    });
+    return () => unsubscribe();
   }, [navigation]);
 
   return (

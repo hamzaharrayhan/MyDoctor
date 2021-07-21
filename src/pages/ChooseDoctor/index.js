@@ -1,54 +1,56 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
-import {DummyDoctor4} from '../../assets';
 import {Header, ListItem} from '../../components';
+import {Firebase} from '../../config';
 import {colors} from '../../utils';
 
-const ChooseDoctor = ({navigation}) => {
+const ChooseDoctor = ({navigation, route}) => {
+  const doctorCategory = route.params;
+  const [doctors, setDoctors] = useState([]);
+  useEffect(() => {
+    doctorByCategory(doctorCategory.category);
+  }, [doctorCategory.category]);
+
+  const doctorByCategory = category => {
+    Firebase.database()
+      .ref('doctors/')
+      .orderByChild('category')
+      .equalTo(category)
+      .once('value')
+      .then(res => {
+        if (res.val()) {
+          const objData = res.val();
+          const data = [];
+          Object.keys(objData).map(item => {
+            data.push({
+              id: item,
+              data: objData[item],
+            });
+          });
+          setDoctors(data);
+        }
+      });
+  };
   return (
-    <ScrollView>
-      <View style={styles.page}>
+    <ScrollView style={styles.page}>
+      <View>
         <Header
-          judul="Pilih Dokter Anak"
+          judul={`Pilih ${doctorCategory.category}`}
           type="dark"
           onPress={() => navigation.goBack()}
         />
-        <ListItem
-          type="next"
-          pic={DummyDoctor4}
-          name="Alexander Jannie"
-          desc="wanita"
-          onPress={() => navigation.navigate('Chatting')}
-        />
-        <ListItem
-          type="next"
-          type="next"
-          pic={DummyDoctor4}
-          name="Alexander Jannie"
-          desc="wanita"
-          onPress={() => navigation.navigate('Chatting')}
-        />
-        <ListItem
-          type="next"
-          pic={DummyDoctor4}
-          name="Alexander Jannie"
-          desc="wanita"
-          onPress={() => navigation.navigate('Chatting')}
-        />
-        <ListItem
-          type="next"
-          pic={DummyDoctor4}
-          name="Alexander Jannie"
-          desc="wanita"
-          onPress={() => navigation.navigate('Chatting')}
-        />
-        <ListItem
-          type="next"
-          pic={DummyDoctor4}
-          name="Alexander Jannie"
-          desc="wanita"
-          onPress={() => navigation.navigate('Chatting')}
-        />
+        {doctors.map(doctor => {
+          return (
+            <ListItem
+              key={doctor.id}
+              type="next"
+              pic={{uri: doctor.data.photo}}
+              name={doctor.data.fullName}
+              desc={doctor.data.gender}
+              onPress={() => navigation.navigate('DoctorProfile', doctor)}
+            />
+          );
+        })}
       </View>
     </ScrollView>
   );

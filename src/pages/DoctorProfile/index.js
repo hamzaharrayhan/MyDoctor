@@ -1,28 +1,33 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {DummyDoctor8} from '../../assets';
+import {StyleSheet, View} from 'react-native';
 import {Header, ProfileItem, UserProfile, Gaps, Button} from '../../components';
 import {colors} from '../../utils';
 
-const DoctorProfile = ({navigation}) => {
+const DoctorProfile = ({navigation, route}) => {
+  const doctorData = route.params;
   return (
     <View style={styles.container}>
-      <Header judul="Doctor Profile" onPress={() => navigation.goBack()} />
-      <UserProfile
-        name="Nairobi Putri Hayza"
-        desc="Dokter Anak"
-        avatar={DummyDoctor8}
-      />
-      <Gaps height={26} />
-      <ProfileItem title="Alumnus" value="Universitas Indonesia, 2020" />
-      <ProfileItem title="Tempat Praktik" value="Rumah Sakit Umum, Bandung" />
-      <ProfileItem title="No. STR" value="12355866953266532" />
-      <Gaps height={7} />
-      <View style={styles.button}>
-        <Button
-          judul="Start Consultation"
-          onPress={() => navigation.navigate('Chatting')}
+      <View style={styles.bg}>
+        <Header judul="Doctor Profile" onPress={() => navigation.goBack()} />
+        <UserProfile
+          name={doctorData.data.fullName}
+          desc={doctorData.data.profession}
+          avatar={{uri: doctorData.data.photo}}
         />
+        <Gaps height={26} />
+        <ProfileItem title="Alumnus" value={doctorData.data.university} />
+        <ProfileItem
+          title="Tempat Praktik"
+          value={doctorData.data.hospital_address}
+        />
+        <ProfileItem title="No. STR" value={doctorData.data.str_number} />
+        <Gaps height={7} />
+        <View style={styles.button}>
+          <Button
+            judul="Start Consultation"
+            onPress={() => navigation.navigate('Chatting', doctorData)}
+          />
+        </View>
       </View>
     </View>
   );

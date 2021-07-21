@@ -1,16 +1,15 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
-import {DummyNews1, DummyNews2, DummyNews3} from '../../../assets';
 import {colors, Fonts} from '../../../utils';
 
-const NewsItem = ({label, picture, date}) => {
+const NewsItem = ({title, image, date, id}) => {
   return (
     <View style={styles.container}>
       <View style={styles.text}>
-        <Text style={styles.headline}>{label}</Text>
+        <Text style={styles.headline}>{title}</Text>
         <Text style={styles.date}>{date}</Text>
       </View>
-      <Image source={picture} style={styles.news} />
+      <Image source={{uri: image}} style={styles.news} />
     </View>
   );
 };

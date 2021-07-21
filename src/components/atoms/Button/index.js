@@ -6,7 +6,7 @@ import SendButton from './SendButton';
 
 const Button = ({type, judul, onPress, icon, disable}) => {
   if (type === 'send') {
-    return <SendButton disable={disable} />;
+    return <SendButton disable={disable} onPress={onPress} />;
   }
   if (type === 'icon-only') {
     return <IconOnly icon={icon} onPress={onPress} />;

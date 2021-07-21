@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {
   DoctorCategory,
@@ -7,31 +7,108 @@ import {
   NewsItem,
   Gaps,
 } from '../../components';
-import {colors, Fonts, getData} from '../../utils';
-import {
-  DummyDoctor1,
-  DummyDoctor2,
-  DummyDoctor3,
-  DummyNews1,
-  DummyNews2,
-  DummyNews3,
-  JSONDoctorCategory,
-} from '../../assets';
-import { useEffect } from 'react';
+import {colors, Fonts, getData, showError} from '../../utils';
+import {ILNullPhoto} from '../../assets';
+import {useFocusEffect} from '@react-navigation/native';
+import {Firebase} from '../../config';
 
 const Doctor = ({navigation}) => {
-  useEffect(() => {
-    getData('user').then(res => {
-      console.log('data user:', res);
-    })
-  }, []);
+  const [news, setNews] = useState([]);
+  const [doctorCategory, setDoctorCategory] = useState([]);
+  const [topDoctors, setTopDoctors] = useState([]);
+  const [profile, setProfile] = useState({
+    fullName: '',
+    profession: '',
+    photo: ILNullPhoto,
+  });
+  useFocusEffect(
+    React.useCallback(() => {
+      setTimeout(() => {
+        getData('user').then(res => {
+          if (res.photo === '') {
+            res.photo = ILNullPhoto;
+            setProfile(res);
+          } else {
+            res.photo = {uri: res.photo};
+            setProfile(res);
+          }
+          navigation.navigate('Doctor');
+        });
+      }, 1);
+      getNews();
+      getDoctorCategory();
+      getTopRatedDoctor();
+    }, []),
+  );
+
+  const getTopRatedDoctor = () => {
+    Firebase.database()
+      .ref('doctors/')
+      .orderByChild('rate')
+      .limitToLast(3)
+      .once('value')
+      .then(res => {
+        if (res.val()) {
+          const objData = res.val();
+          const data = [];
+          Object.keys(objData).map(key => {
+            data.push({
+              id: key,
+              data: objData[key],
+            });
+          });
+          setTopDoctors(data);
+        }
+      })
+      .catch(err => {
+        showError(err.message);
+      });
+  };
+
+  const getNews = () => {
+    Firebase.database()
+      .ref('news/')
+      .once('value')
+      .then(res => {
+        if (res.val()) {
+          const data = res.val();
+          const filterData = data.filter(el => el !== null);
+          setNews(filterData);
+        }
+      })
+      .catch(err => {
+        showError(err.message);
+      });
+  };
+
+  const getDoctorCategory = () => {
+    Firebase.database()
+      .ref('doctor_category/')
+      .once('value')
+      .then(res => {
+        if (res.val()) {
+          const data = res.val();
+          const filterData = data.filter(el => el !== null);
+          setDoctorCategory(filterData);
+        }
+      })
+      .catch(err => {
+        showError(err.message);
+      });
+  };
+
   return (
     <View style={styles.page}>
       <View style={styles.content}>
         <ScrollView vertical showsVerticalScrollIndicator={false}>
           <Gaps height={30} />
           <View style={styles.profile}>
-            <HomeProfile onPress={() => navigation.navigate('ProfilePage')} />
+            <HomeProfile
+              onPress={() => navigation.navigate('ProfilePage')}
+              name={profile.fullName}
+              photo={profile.photo}
+              profession={profile.profession}
+            />
             <Text style={styles.ask}>
               Mau konsultasi dengan siapa hari ini?
             </Text>
@@ -40,12 +117,12 @@ const Doctor = ({navigation}) => {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.kategori}>
                 <Gaps width={32} />
-                {JSONDoctorCategory.data.map(item => {
+                {doctorCategory.map(item => {
                   return (
                     <DoctorCategory
                       key={item.id}
                       kategori={item.category}
-                      onPress={() => navigation.navigate('ChooseDoctor')}
+                      onPress={() => navigation.navigate('ChooseDoctor', item)}
                     />
                   );
                 })}
@@ -56,43 +133,31 @@ const Doctor = ({navigation}) => {
           <View style={styles.ratenews}>
             <View>
               <Text style={styles.sectionlabel}>Top Rated Doctors</Text>
-              <RatedDoctor
-                name="Alexa Rachel"
-                desc="Pediatrician"
-                avatar={DummyDoctor1}
-                onPress={() => navigation.navigate('DoctorProfile')}
-              />
-              <RatedDoctor
-                name="Sunny Frank"
-                desc="Dentist"
-                avatar={DummyDoctor2}
-                onPress={() => navigation.navigate('DoctorProfile')}
-              />
-              <RatedDoctor
-                name="Poe Minh"
-                desc="Podiatrist"
-                avatar={DummyDoctor3}
-                onPress={() => navigation.navigate('DoctorProfile')}
-              />
+              {topDoctors.map(doctor => {
+                return (
+                  <RatedDoctor
+                    key={doctor.id}
+                    name={doctor.data.fullName}
+                    desc={doctor.data.profession}
+                    avatar={{uri: doctor.data.photo}}
+                    onPress={() => navigation.navigate('DoctorProfile', doctor)}
+                  />
+                );
+              })}
             </View>
           </View>
           <View>
             <Text style={styles.sectionlabel2}>Good News</Text>
-            <NewsItem
-              picture={DummyNews1}
-              date="Today"
-              label="Is it safe to stay at home during coronavirus?"
-            />
-            <NewsItem
-              picture={DummyNews2}
-              date="Today"
-              label="Consume yellow citrus helps you healthier"
-            />
-            <NewsItem
-              picture={DummyNews3}
-              date="Today"
-              label="Learn how to make a proper orange juice at home"
-            />
+            {news.map(item => {
+              return (
+                <NewsItem
+                  title={item.title}
+                  image={item.image}
+                  date={item.date}
+                  key={item.id}
+                />
+              );
+            })}
           </View>
           <Gaps height={16} />
         </ScrollView>
